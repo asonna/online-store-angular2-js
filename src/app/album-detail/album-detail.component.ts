@@ -24,7 +24,7 @@ export class AlbumDetailComponent implements OnInit {
     this.route.params.forEach((urlParametersArray) => {
       this.albumId = parseInt(urlParametersArray['id']);
     });
-    this.albumToDisplay = this.albumService.getAlbumById(this.albumId);
+    // this.albumToDisplay = this.albumService.getAlbumById(this.albumId);
   }
 
 }
