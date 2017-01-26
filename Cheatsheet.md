@@ -1,3 +1,145 @@
+## Create new project
+ng new online-store
+
+##Install bower
+*npm list -g bower*
+ or global install if no version was received:
+*npm install bower -g*
+
+## Initialize bower
+*bower init*
+
+- Add */bower_components* under the dependencies section of the .gitignore file.
+###&
+...
+# dependencies
+/node_modules
+*/bower_components*
+...
+###
+
+- Install bower dependencies like bootstrap:
+*bower install bootstrap --save*
+
+- Modify the *angular-cli.json* file to include the bower package code as follow:
+###
+...
+"apps": [
+    {
+      ...
+      ],
+      ...
+      "styles": [
+        "styles.css",
+        *"../bower_components/bootstrap/dist/css/bootstrap.css"*
+      ],
+...
+###
+
+Use following command:
+- *ng serve* - to lauch project
+- *ng lint* - to catch errors if any
+- *ng g component ComponentName* - create component page
+- *ng g component welcome* - to create pipe if needed
+- *ng g class class-name.model* - to create the object model and add to it the constructor with properties as follow:
+###*
+  constructor (public title: string, public artist: string, public description: string) {}
+###*
+- Finalize Design
+- Create route file:
+(/app/app.routing.ts)
+-Import the following to top of the file.
+###*
+import { ModuleWithProviders }  from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+const appRoutes: Routes = [ ];
+
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+###*
+FOR NEW ROUTES IMPORT COMPONENT (xxx means the name of the component) & DEFINE PATH
+
+
+- Update the following file: *(app/app.routing.ts)* with below:
+###*
+import { ModuleWithProviders }  from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { XxxComponent } from './xxx/xxx.component';
+
+const appRoutes: Routes = [
+  {
+    path: '',
+    component: XxxComponent
+  }
+];
+
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+###
+
+- Update the following file to import router into the app module *(.../app/app.module.ts)* with below:
+###*
+...
+import { WelcomeComponent } from './welcome/welcome.component';
+import { routing } from './app.routing';
+...
+###
+
+- Update the following file to export router so other components can access it *(.../app/app.routing.ts)* with below:
+###*
+...
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+###
+
+- add the routing constant to our root module's *(.../app/app.module.ts)* imports array:
+###*
+...
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    routing
+  ],
+...
+###
+
+- Render route with the router outlet added into the *(src/app/app.component.html)* as follow:
+###*
+<h1>{{title}}</h1>
+<router-outlet></router-outlet>
+###
+
+- Add div and page title to our root component *(src/app/app.component.html)*. like this example:
+###*
+<div class="container">
+  <h1>{{title}}</h1>
+  <router-outlet></router-outlet>
+</div>
+###
+
+- You can now change the title on your app.component.ts file if wanted
+- Also update your other component.html file to reflect what you want to display.
+
+- RouterLink are located in the app.component.html file:
+###
+...
+   <a class="navbar-brand" routerLink="">Epicodus Tunes</a>
+    ...
+      <li><a routerLink="about">About</a></li>
+...
+###
+
+- All routes paths are defined in the app.routing.ts file as follow:
+###
+...
+const appRoutes: Routes = [
+  {
+     path: '',
+     component: WelcomeComponent
+   },
+...
+###
+_________________________________________________________________
+
 ## Firebase install##
 
 1 - log into a firebase system: https://firebase.google.com/
@@ -28,10 +170,12 @@ right after this line:
       /src/app/api-keys.ts   ###
 
 8 - Import our Firebase credentials into our root module by adding the following two line of code in src/app/app.modules:
-### import { masterFirebaseConfig } from './api-keys';###
-### import { AngularFireModule } from 'angularfire2'; ###
+###*
+import { masterFirebaseConfig } from './api-keys';
+import { AngularFireModule } from 'angularfire2';
+###
 
-9- Export firebaseConfig using below code: (We'll fetch each value from the masterFirebaseConfig object we imported (and ignored). This will make them available throughout our root module)
+9- Export firebaseConfig using below code: (We'll fetch each value from the masterFirebaseConfig object we imported (and ignored). This will make them available throughout our root module *app.modules.ts*)
 ###
 export const firebaseConfig = {
   apiKey: masterFirebaseConfig.apiKey,
@@ -41,7 +185,7 @@ export const firebaseConfig = {
 };
 ###
 
-10 - Add the AngularFireModule we just imported to the root component's imports array; it's also called initializeApp() method and passes in our Firebase credentials; and to be added right after "routing," under "imports" section in the body:
+10 - Add the AngularFireModule we just imported to the root component's imports array in *app.modules.ts*; it's also called initializeApp() method and passes in our Firebase credentials; and to be added right after "routing," under "imports" section in the body:
 ### AngularFireModule.initializeApp(firebaseConfig) ###
 
 11- Back to the firebase site, click on "database", then "rules" and update the rules as follow to allow applications to read and write to it:
@@ -247,4 +391,4 @@ FYI - Gray out any method still pointing out to a local repository such as *mock
 ...
 ###
 
-30 - 
+30 -
